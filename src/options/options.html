@@ -1,0 +1,238 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Overleaf Fonts+ Options</title>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        margin: 0;
+        font-size: 14px;
+        color: #202124;
+        background: #f1f3f4;
+        display: flex;
+        justify-content: center;
+        padding: 24px 16px 32px;
+        box-sizing: border-box;
+      }
+
+      .md-surface {
+        width: 100%;
+        max-width: 880px;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(60, 64, 67, 0.3),
+          0 1px 2px rgba(60, 64, 67, 0.15);
+        padding: 20px 24px 18px;
+        box-sizing: border-box;
+      }
+
+      .md-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+
+      .md-header-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: #1a73e8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-weight: 600;
+        margin-right: 12px;
+        font-size: 16px;
+      }
+
+      h1 {
+        font-size: 20px;
+        margin: 0;
+      }
+
+      .subtitle {
+        margin: 4px 0 16px;
+        max-width: 640px;
+        color: #5f6368;
+      }
+
+      .section-title {
+        margin: 12px 0 4px;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #5f6368;
+      }
+
+      .body-text {
+        margin: 4px 0 12px;
+        max-width: 640px;
+      }
+
+      #fonts-table {
+        border-collapse: collapse;
+        width: 100%;
+        max-width: 720px;
+        margin-top: 8px;
+        margin-bottom: 12px;
+      }
+
+      #fonts-table th,
+      #fonts-table td {
+        border-bottom: 1px solid #e0e0e0;
+        padding: 4px 6px;
+        vertical-align: top;
+      }
+
+      #fonts-table th {
+        text-align: left;
+        font-weight: 600;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        color: #5f6368;
+      }
+
+      #fonts-table input[type="text"] {
+        width: 100%;
+        box-sizing: border-box;
+        font-size: 13px;
+        padding: 6px 10px;
+        border-radius: 8px;
+        border: 1px solid #dadce0;
+        background: #f8f9fa;
+        transition: border-color 120ms ease, box-shadow 120ms ease,
+          background 120ms ease;
+      }
+
+      #fonts-table input[type="text"]:focus {
+        outline: none;
+        border-color: #1a73e8;
+        box-shadow: 0 0 0 1px rgba(26, 115, 232, 0.1),
+          0 1px 2px rgba(60, 64, 67, 0.2);
+        background: #ffffff;
+      }
+
+      #fonts-table tbody tr:hover td {
+        background: #f8f9fa;
+      }
+
+      .font-row-meta {
+        font-size: 11px;
+        color: #5f6368;
+        margin-top: 2px;
+      }
+
+      .buttons {
+        margin-top: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      button {
+        font-size: 13px;
+        padding: 6px 14px;
+        border-radius: 18px;
+        border: none;
+        cursor: pointer;
+        background: transparent;
+      }
+
+      .btn-primary {
+        background: #1a73e8;
+        color: #ffffff;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-primary:hover {
+        background: #185abc;
+      }
+
+      .btn-outlined {
+        border: 1px solid #dadce0;
+        color: #1a73e8;
+        background: #ffffff;
+      }
+
+      .btn-outlined:hover {
+        background: #f1f3f4;
+      }
+
+      input[type="checkbox"] {
+        accent-color: #1a73e8;
+      }
+
+      .status {
+        margin-top: 8px;
+        font-size: 12px;
+      }
+
+      .status--ok {
+        color: #0d652d;
+      }
+
+      .status--error {
+        color: #b3261e;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="md-surface">
+      <header class="md-header">
+        <div class="md-header-icon">OL</div>
+        <div>
+          <h1>Overleaf Fonts+ Options</h1>
+          <p class="subtitle">
+            Control which custom editor fonts appear in Overleaf.
+          </p>
+        </div>
+      </header>
+
+      <p class="body-text">
+        Choose which custom fonts are added to Overleaf's
+        <strong>Menu → Settings → Appearance → Font family</strong> list. Only
+        fonts that are installed on your system (or available from another
+        source, like a font manager) will actually render in the editor;
+        otherwise the browser will fall back to a default monospace font.
+      </p>
+
+      <div class="section-title">Custom fonts</div>
+
+      <table id="fonts-table" aria-label="Custom fonts">
+        <thead>
+          <tr>
+            <th style="width: 60px">Enabled</th>
+            <th style="width: 180px">Name</th>
+            <th>CSS font-family stack</th>
+          </tr>
+        </thead>
+        <tbody id="fonts-tbody"></tbody>
+      </table>
+
+      <div class="buttons">
+        <button id="add-font" type="button" class="btn-outlined">
+          Add font
+        </button>
+        <button
+          id="restore-defaults"
+          type="button"
+          class="btn-outlined"
+        >
+          Restore defaults
+        </button>
+        <button id="save" type="button" class="btn-primary">
+          Save
+        </button>
+      </div>
+
+      <div id="status" class="status" role="status" aria-live="polite"></div>
+
+      <script src="options.js"></script>
+    </div>
+  </body>
+  </html>
