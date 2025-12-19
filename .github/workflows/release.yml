@@ -1,0 +1,51 @@
+name: Release
+
+on:
+    push:
+        tags:
+            - "v*"
+
+permissions:
+    contents: write
+
+jobs:
+    create-release:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Read manifest version
+              id: manifest
+              run: echo "version=$(jq -r '.version' manifest.json)" >> "$GITHUB_OUTPUT"
+
+            - name: Capture tag name
+              id: tag
+              run: echo "tag=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+
+            - name: Verify tag matches manifest.json
+              run: |
+                  MANIFEST_VERSION=${{ steps.manifest.outputs.version }}
+                  TAG_VERSION=${{ steps.tag.outputs.tag }}
+                  TAG_STRIPPED=${TAG_VERSION#v}
+                  if [ "$MANIFEST_VERSION" != "$TAG_STRIPPED" ]; then
+                    echo "Tag version ($TAG_VERSION) must match manifest.json version ($MANIFEST_VERSION)" >&2
+                    exit 1
+                  fi
+
+            - name: Package extension
+              id: package
+              run: |
+                  TAG=${{ steps.tag.outputs.tag }}
+                  ARCHIVE="overleaf-fonts-plus-${TAG}.zip"
+                  zip -r "$ARCHIVE" manifest.json README.md icons src -x "**/.DS_Store"
+                  echo "archive=$ARCHIVE" >> "$GITHUB_OUTPUT"
+
+            - name: Create GitHub release
+              uses: softprops/action-gh-release@v2
+              with:
+                  tag_name: ${{ steps.tag.outputs.tag }}
+                  name: Overleaf Fonts+ ${{ steps.manifest.outputs.version }}
+                  generate_release_notes: true
+                  files: ${{ steps.package.outputs.archive }}
